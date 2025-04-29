@@ -1,0 +1,80 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+# from sklearn.impute import KNNImputer
+
+# def clean_data(df):
+#     # Drop columns: 'id', 'url' and 25 other columns
+#     df = df.drop(columns=['id', 'url', 'province', 'monthlyCost', 'hasAttic', 'hasBasement', 'hasDressingRoom', 'diningRoomSurface', 'hasDiningRoom', 'roomCount', 'streetFacadeWidth', 'hasLift', 'hasHeatPump', 'hasPhotovoltaicPanels', 'hasThermicPanels', 'kitchenSurface', 'hasLivingRoom', 'livingRoomSurface', 'hasBalcony', 'gardenOrientation', 'hasAirConditioning', 'hasArmoredDoor', 'hasVisiophone', 'hasOffice', 'terraceOrientation', 'accessibleDisabledPeople', 'Unnamed: 0'])
+#     # Drop 'APARTMENT_GROUP' and 'HOUSE_GROUPR values in type column
+#     df = df[~df['type'].isin(['APARTMENT_GROUP', 'HOUSE_GROUP'])]
+#     # Drop 'APARTMENT_BLOCK' in subtype column
+#     df = df[~df['subtype'].isin(['APARTMENT_BLOCK'])]
+#     return df
+
+# Loaded variable 'df' 
+df = pd.read_csv('./immo-eliza-machine-learning-Linwe-e/data/Kangaroo.csv')
+
+# # # df_clean = clean_data(df.copy())
+# # # df_clean.head()
+
+# # # Select column: 'bedroomCount'
+# # mode_bedrooms = df['bedroomCount'].mode()[0]
+# # print(mode_bedrooms)
+
+# # # Median of bed rooms by type
+# # median_by_type = df.groupby('type')['bedroomCount'].median()
+# # print("Médianes par type de bien:", median_by_type)
+
+# # print(df.shape)
+# df = df.drop(columns=['id', 'url', 'province', 'monthlyCost', 'hasAttic', 'hasBasement', 'hasDressingRoom', 'diningRoomSurface', 'hasDiningRoom', 'roomCount', 'streetFacadeWidth', 'hasLift', 'hasHeatPump', 'hasPhotovoltaicPanels', 'hasThermicPanels', 'kitchenSurface', 'hasLivingRoom', 'livingRoomSurface', 'hasBalcony', 'gardenOrientation', 'hasAirConditioning', 'hasArmoredDoor', 'hasVisiophone', 'hasOffice', 'terraceOrientation', 'accessibleDisabledPeople', 'Unnamed: 0'])
+
+# print(df.columns)
+
+# # 1. Calculer la médiane du nombre de chambres par sous-type
+# # (avant toute imputation)
+# median_by_subtype = df.groupby('subtype')['bedroomCount'].median()
+# print("Médianes par type de bien:")
+# print(median_by_subtype)
+
+# # 2. Pour chaque sous-type, remplacer les valeurs manquantes par la médiane correspondante
+# for subtype in df['subtype'].unique():
+#     # Créer un masque qui identifie les lignes où:
+#     # - Le sous-type correspond à celui qu'on traite actuellement
+#     # - ET la valeur de bedroomCount est manquante
+#     mask = (df['subtype'] == subtype) & (df['bedroomCount'].isna())
+    
+#     # Remplacer ces valeurs par la médiane du sous-type
+#     df.loc[mask, 'bedroomCount'] = median_by_subtype[subtype]
+
+# # 3. Vérifier s'il reste des valeurs manquantes
+# remaining_missing = df['bedroomCount'].isna().sum()
+# print(f"Valeurs manquantes restantes: {remaining_missing}")
+
+# # 4. Si certains sous-types n'ont pas de médiane (tous NaN),
+# # utiliser la médiane globale pour les valeurs encore manquantes
+# if remaining_missing > 0:
+#     global_median = df['bedroomCount'].dropna().median()
+#     df['bedroomCount'].fillna(global_median, inplace=True)
+#     print(f"Médiane globale utilisée pour les cas restants: {global_median}")
+
+# # Change column type to int64 for column: 'buildingConstructionYear'
+# df = df.astype({'buildingConstructionYear': 'Int64'})
+
+# # Vérification
+# print(f"Type: {df['buildingConstructionYear'].dtype}")
+# print(f"Valeurs manquantes: {df['buildingConstructionYear'].isna().sum()}")
+
+# # 1. Convertir en Int64 pour supporter les valeurs manquantes
+# df['buildingConstructionYear'] = df['buildingConstructionYear'].astype('Int64')
+
+# # 2. Corriger les années futures (tout ce qui dépasse 2023)
+# current_year = 2025
+# df.loc[df['buildingConstructionYear'] > current_year, 'buildingConstructionYear'] = pd.NA
+
+# # 3. Vérifier le résultat
+# print(f"Valeurs manquantes après correction: {df['buildingConstructionYear'].isna().sum()}")
+
+#print unique value of epcScore column
+print(df['epcScore'].unique())
+
