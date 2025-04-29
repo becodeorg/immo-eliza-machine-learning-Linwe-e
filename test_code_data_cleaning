@@ -13,7 +13,7 @@ import pandas as pd
 #     return df
 
 # Loaded variable 'df' 
-df = pd.read_csv('./immo-eliza-machine-learning-Linwe-e/data/Kangaroo.csv')
+df = pd.read_csv('./data/Kangaroo_cleaned.csv')
 
 # # # df_clean = clean_data(df.copy())
 # # # df_clean.head()
@@ -76,5 +76,5 @@ df = pd.read_csv('./immo-eliza-machine-learning-Linwe-e/data/Kangaroo.csv')
 # print(f"Valeurs manquantes après correction: {df['buildingConstructionYear'].isna().sum()}")
 
 #print unique value of epcScore column
-print(df['epcScore'].unique())
+print(df['subtype'].unique())
 
