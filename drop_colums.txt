@@ -1,0 +1,57 @@
+Voici la liste mise en forme, une colonne par ligne :
+
+R (retirer), G (garder), I (à inspecter plus finement).
+
+Unnamed: 0  R   0
+id  R  0 
+url  R  0
+type  G 0
+subtype  G  0
+bedroomCount  G 8
+bathroomCount  G    17
+province I  0
+locality  I 0
+postCode I 0
+habitableSurface G  16
+roomCount  R    73
+monthlyCost  R  100
+hasAttic  R 84
+hasBasement  R 64
+hasDressingRoom  R  97
+diningRoomSurface  R    91
+hasDiningRoom  R    82
+buildingCondition  G    28
+buildingConstructionYear  G 39
+facedeCount  G  34
+floorCount  I 53
+streetFacadeWidth  R   81
+hasLift  R  76
+floodZoneType  G 45   
+heatingType  G  41
+hasHeatPump  R  91
+hasPhotovoltaicPanels R  90
+hasThermicPanels R  96
+kitchenSurface  R   70
+kitchenType  G  48
+landSurface I 51
+hasLivingRoom  R 47
+livingRoomSurface  R  64  
+hasBalcony  R   100
+hasGarden  G    80
+gardenSurface  I    80
+gardenOrientation R 93
+parkingCountIndoor  I   65
+parkingCountOutdoor  I  77
+hasAirConditioning  R   99
+hasArmoredDoor  R   95
+hasVisiophone  R    80
+hasOffice  R    87
+toiletCount  G  31
+hasSwimmingPool  G  98
+hasFireplace  G 96
+hasTerrace  G   41
+terraceSurface  R   64
+terraceOrientation  R   86
+accessibleDisabledPeople  R 100
+epcScore  G 19
+price G 5

@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy.stats import zscore
 # from sklearn.impute import KNNImputer
 
 # def clean_data(df):
@@ -13,27 +16,27 @@ import pandas as pd
 #     return df
 
 # Loaded variable 'df' 
-df = pd.read_csv('./data/Kangaroo_cleaned.csv')
+df = pd.read_csv('./data/Kangaroo.csv')
 
 # # # df_clean = clean_data(df.copy())
 # # # df_clean.head()
 
-# # # Select column: 'bedroomCount'
-# # mode_bedrooms = df['bedroomCount'].mode()[0]
+# # # Select column: 'bathroomCount'
+# # mode_bedrooms = df['bathroomCount'].mode()[0]
 # # print(mode_bedrooms)
 
 # # # Median of bed rooms by type
-# # median_by_type = df.groupby('type')['bedroomCount'].median()
+# # median_by_type = df.groupby('type')['bathroomCount'].median()
 # # print("Médianes par type de bien:", median_by_type)
 
 # # print(df.shape)
 # df = df.drop(columns=['id', 'url', 'province', 'monthlyCost', 'hasAttic', 'hasBasement', 'hasDressingRoom', 'diningRoomSurface', 'hasDiningRoom', 'roomCount', 'streetFacadeWidth', 'hasLift', 'hasHeatPump', 'hasPhotovoltaicPanels', 'hasThermicPanels', 'kitchenSurface', 'hasLivingRoom', 'livingRoomSurface', 'hasBalcony', 'gardenOrientation', 'hasAirConditioning', 'hasArmoredDoor', 'hasVisiophone', 'hasOffice', 'terraceOrientation', 'accessibleDisabledPeople', 'Unnamed: 0'])
 
-# print(df.columns)
+
 
 # # 1. Calculer la médiane du nombre de chambres par sous-type
 # # (avant toute imputation)
-# median_by_subtype = df.groupby('subtype')['bedroomCount'].median()
+# median_by_subtype = df.groupby('subtype')['bathroomCount'].median()
 # print("Médianes par type de bien:")
 # print(median_by_subtype)
 
@@ -41,21 +44,21 @@ df = pd.read_csv('./data/Kangaroo_cleaned.csv')
 # for subtype in df['subtype'].unique():
 #     # Créer un masque qui identifie les lignes où:
 #     # - Le sous-type correspond à celui qu'on traite actuellement
-#     # - ET la valeur de bedroomCount est manquante
-#     mask = (df['subtype'] == subtype) & (df['bedroomCount'].isna())
+#     # - ET la valeur de bathroomCount est manquante
+#     mask = (df['subtype'] == subtype) & (df['bathroomCount'].isna())
     
 #     # Remplacer ces valeurs par la médiane du sous-type
-#     df.loc[mask, 'bedroomCount'] = median_by_subtype[subtype]
+#     df.loc[mask, 'bathroomCount'] = median_by_subtype[subtype]
 
 # # 3. Vérifier s'il reste des valeurs manquantes
-# remaining_missing = df['bedroomCount'].isna().sum()
+# remaining_missing = df['bathroomCount'].isna().sum()
 # print(f"Valeurs manquantes restantes: {remaining_missing}")
 
 # # 4. Si certains sous-types n'ont pas de médiane (tous NaN),
 # # utiliser la médiane globale pour les valeurs encore manquantes
 # if remaining_missing > 0:
-#     global_median = df['bedroomCount'].dropna().median()
-#     df['bedroomCount'].fillna(global_median, inplace=True)
+#     global_median = df['bathroomCount'].dropna().median()
+#     df['bathroomCount'].fillna(global_median, inplace=True)
 #     print(f"Médiane globale utilisée pour les cas restants: {global_median}")
 
 # # Change column type to int64 for column: 'buildingConstructionYear'
@@ -75,6 +78,78 @@ df = pd.read_csv('./data/Kangaroo_cleaned.csv')
 # # 3. Vérifier le résultat
 # print(f"Valeurs manquantes après correction: {df['buildingConstructionYear'].isna().sum()}")
 
-#print unique value of epcScore column
-print(df['subtype'].unique())
+# #print unique value of epcScore column
+# print(df['epcScore'].unique())
 
+# print(df.columns)
+
+#Datavisualization for outliers
+plt.figure(figsize=(12,6))
+sns.boxplot(x=df['landSurface'], color='skyblue')
+plt.title('landSurface ', fontsize=16)
+plt.xlabel('landSurface', fontsize=14)
+plt.show()
+
+# p90 and p95
+percentiles = df['landSurface'].quantile([0.10, 0.90, 0.95])
+p90 = percentiles.loc[0.90]
+p95 = percentiles.loc[0.95]
+p10 = percentiles.loc[0.10]
+
+
+print(f"90ᵉ percentile : {p90:.0f} ")
+print(f"95ᵉ percentile : {p95:.0f} ")
+print(f"10ᵉ percentile : {p10:.0f} ")
+
+n_above_p90 = (df['landSurface'] > p90).sum()
+n_above_p95 = (df['landSurface'] > p95).sum()
+n_below_p10 = (df['landSurface'] < p10).sum()
+total = len(df)
+
+print(f"Biens > p90 : {n_above_p90} soit {n_above_p90/total:.2%}")
+print(f"Biens > p95 : {n_above_p95} soit {n_above_p95/total:.2%}")
+print(f"Biens < p10 : {n_below_p10} soit {n_below_p10/total:.2%}")
+
+# # 1. Affiche toutes les colonnes si besoin
+# pd.set_option('display.max_columns', None)
+# pd.set_option('display.width', 1200)
+
+# # 2. Définis les colonnes à voir
+# cols = ['bathroomCount', 'price', 'locality', 'postCode', 'subtype']
+
+# # 3. Sample et affiche
+# small_sample = df[df['bathroomCount'] > 10][cols].sample(10)
+# print(small_sample)
+
+
+# # 1) Nombre total de biens avant nettoyage
+# initial_count = len(df)
+# print(f"Nombre de lignes avant drop : {initial_count}")
+
+# # 2) On filtre et on crée une nouvelle DataFrame
+# df_clean = df[df['bathroomCount'] <= 3].copy()
+
+# # 3) Nombre de biens supprimés et pourcentage
+# removed = initial_count - len(df_clean)
+# pct = removed / initial_count * 100
+# print(f"Biens supprimés (>7 chambres) : {removed} soit {pct:.2f}% du dataset")
+
+# # 4) Réinitialiser l’index (optionnel mais conseillé)
+# df_clean.reset_index(drop=True, inplace=True)
+
+# # 5) Remplacer l’ancien df si tu veux travailler sur df_clean
+# df = df_clean
+
+#landsurface
+# 1) On retire d’abord les NaN pour le calcul des stats
+ls = df['landSurface'].dropna()
+
+# 2) On calcule les statistiques
+stats = ls.describe(percentiles=[.1, .25, .5, .75, .9, .95])
+print(stats)
+plt.hist(ls, bins=50, edgecolor='k')
+plt.xlim(0, 5000)   # pour te concentrer sur 99% des données
+plt.xlabel('Surface du terrain (m²)')
+plt.ylabel('Nombre de biens')
+plt.title('Distribution de landsurface')
+plt.show()
