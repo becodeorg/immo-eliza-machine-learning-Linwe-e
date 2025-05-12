@@ -84,14 +84,15 @@ df = pd.read_csv('./data/Kangaroo.csv')
 # print(df.columns)
 
 #Datavisualization for outliers
+
 plt.figure(figsize=(12,6))
-sns.boxplot(x=df['landSurface'], color='skyblue')
-plt.title('landSurface ', fontsize=16)
-plt.xlabel('landSurface', fontsize=14)
+sns.boxplot(x=df['habitableSurface'], color='skyblue')
+plt.title('habitableSurface ', fontsize=16)
+plt.xlabel('habitableSurface', fontsize=14)
 plt.show()
 
 # p90 and p95
-percentiles = df['landSurface'].quantile([0.10, 0.90, 0.95])
+percentiles = df['habitableSurface'].quantile([0.10, 0.90, 0.95])
 p90 = percentiles.loc[0.90]
 p95 = percentiles.loc[0.95]
 p10 = percentiles.loc[0.10]
@@ -101,9 +102,9 @@ print(f"90ᵉ percentile : {p90:.0f} ")
 print(f"95ᵉ percentile : {p95:.0f} ")
 print(f"10ᵉ percentile : {p10:.0f} ")
 
-n_above_p90 = (df['landSurface'] > p90).sum()
-n_above_p95 = (df['landSurface'] > p95).sum()
-n_below_p10 = (df['landSurface'] < p10).sum()
+n_above_p90 = (df['habitableSurface'] > p90).sum()
+n_above_p95 = (df['habitableSurface'] > p95).sum()
+n_below_p10 = (df['habitableSurface'] < p10).sum()
 total = len(df)
 
 print(f"Biens > p90 : {n_above_p90} soit {n_above_p90/total:.2%}")
@@ -140,9 +141,9 @@ print(f"Biens < p10 : {n_below_p10} soit {n_below_p10/total:.2%}")
 # # 5) Remplacer l’ancien df si tu veux travailler sur df_clean
 # df = df_clean
 
-#landsurface
+#bedroomCount
 # 1) On retire d’abord les NaN pour le calcul des stats
-ls = df['landSurface'].dropna()
+ls = df['bedroomCount'].dropna()
 
 # 2) On calcule les statistiques
 stats = ls.describe(percentiles=[.1, .25, .5, .75, .9, .95])
@@ -151,5 +152,5 @@ plt.hist(ls, bins=50, edgecolor='k')
 plt.xlim(0, 5000)   # pour te concentrer sur 99% des données
 plt.xlabel('Surface du terrain (m²)')
 plt.ylabel('Nombre de biens')
-plt.title('Distribution de landsurface')
+plt.title('Distribution de bedroomCount')
 plt.show()
